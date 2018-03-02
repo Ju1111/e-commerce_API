@@ -1,3 +1,5 @@
+const verify = require('./jwt').verify
+const User = require('./users/model')
 const express = require('express')
 const db = require('./models')
 
@@ -11,6 +13,37 @@ const productsRouter = require('./products/router')
 const usersRouter = require('./users/router')
 
 app.use(bodyParser.json())
+
+app.use(function (request, response, next) {
+  if (!request.headers.authorization) return next()
+
+  const auth = request.headers.authorization.split(' ')
+  if (auth[0] === 'Bearer') {
+    verify(auth[1], function (err, jwt) {
+      if (err) {
+        console.error(err)
+        response.status(400).send({
+          message: "JWT token invalid"
+        })
+      }
+      else {
+        User
+          .findById(jwt.id)
+          .then(entity => {
+            request.user = entity
+            next()
+          })
+          .catch(err => {
+            console.error(err)
+            response.status(500).send({
+              message: 'Something went horribly wrong'
+            })
+          })
+      }
+    })
+  }
+  else next()
+})
 
 app.use(productsRouter)
 app.use(usersRouter)

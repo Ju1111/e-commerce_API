@@ -2,6 +2,12 @@ const Router = require('express').Router
 const Product = require('./model')
 
 const router = new Router()
+const requireUser = (req, res, next) => {
+	if (req.user) next()
+	else res.status(401).send({
+		message: 'Please login'
+	})
+}
 
 router.get('/products', (request, response) => {
   const products = Product
@@ -35,7 +41,7 @@ router.get('/products(:id)', (request, response) => {
   })
 })
 
-router.post('/products', (request, response) => {
+router.post('/products', requireUser, (request, response) => {
   const product = request.body
   console.log(product)
   // ... insert the new data into our database
@@ -56,7 +62,7 @@ const updateOrPatch = (request, respond) => {
   const updates = request.body
 }
 
-router.put('/products/:id', (request, response) => {
+router.put('/products/:id', requireUser, (request, response) => {
   const productId = Number(request.params.id)
   const updates = request.body
 
@@ -78,10 +84,10 @@ router.put('/products/:id', (request, response) => {
     })
 })
 
-router.put('/products/:id', updateOrPatch)
-router.patch('/products/:id', updateOrPatch)
+router.put('/products/:id', requireUser, updateOrPatch)
+router.patch('/products/:id', requireUser, updateOrPatch)
 
-router.delete('/products/:id', (request, response) => {
+router.delete('/products/:id', requireUser, (request, response) => {
   Product.findById(reuest.params.id)
   .then(entity => {
     return entity.destroy()
