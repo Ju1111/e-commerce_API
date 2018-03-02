@@ -10,6 +10,8 @@ const bodyParser = require('body-parser')
 const productsRouter = require('./products/router')
 const usersRouter = require('./users/router')
 
+app.use(bodyParser.json())
+
 app.use(productsRouter)
 app.use(usersRouter)
 
@@ -19,8 +21,6 @@ app.use(function(request, response, next) {
   response.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE')
   next()
 })
-
-app.use(bodyParser.json())
 
 app.listen(port, () => {
   console.log(`

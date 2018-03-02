@@ -36,42 +36,42 @@ router.get('/products(:id)', (request, response) => {
 })
 
 router.post('/products', (request, response) => {
-  const product = req.body
+  const product = request.body
   console.log(product)
   // ... insert the new data into our database
   Product.create(product)
     .then(entity => {
-      res.status(201)
+      response.status(201)
       //send an empty response to the client
-      res.json(entity)
+      response.json(entity)
     })
     .catch(err => {
-      res.status(422)
-      res.json({ message: err.message })
+      response.status(422)
+      response.json({ message: err.message })
     })
 })
 
 const updateOrPatch = (request, respond) => {
-  const productId = Number(req.params.id)
-  const updates = req.body
+  const productId = Number(request.params.id)
+  const updates = request.body
 }
 
 router.put('/products/:id', (request, response) => {
-  const productId = Number(req.params.id)
-  const updates = req.body
+  const productId = Number(request.params.id)
+  const updates = request.body
 
   // find the product in the DB
-  Product.findById(req.params.id)
+  Product.findById(request.params.id)
     .then(entity => {
       // change the product and store in DB
       return entity.update(updates)
     })
     .then(final => {
       // respond with the changed product and status code 200 OK
-      res.send(final)
+      response.send(final)
     })
     .catch(error => {
-      res.status(500).send({
+      response.status(500).send({
         message: `Something went wrong`,
         error
       })
@@ -82,17 +82,17 @@ router.put('/products/:id', updateOrPatch)
 router.patch('/products/:id', updateOrPatch)
 
 router.delete('/products/:id', (request, response) => {
-  Product.findById(req.params.id)
+  Product.findById(reuest.params.id)
   .then(entity => {
     return entity.destroy()
   })
   .then(() => {
-    res.send({
+    response.send({
       message: 'The product was deleted succesfully'
     })
   })
   .catch(error => {
-    res.status(500).send({
+    response.status(500).send({
       message: `Something went wrong`,
       error
     })
