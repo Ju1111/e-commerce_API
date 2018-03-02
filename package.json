@@ -1,0 +1,22 @@
+{
+  "name": "e-commerce_API",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "julia",
+  "license": "MIT",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon --inspect .",
+    "sequelize": "node_modules/.bin/sequelize"
+  },
+  "dependencies": {
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "jsonwebtoken": "^8.1.1",
+    "pg": "6",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.35.1",
+    "sequelize-cli": "^4.0.0"
+  }
+}
